@@ -45,17 +45,25 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if strings.Contains(m.Content, "https://nextcloud.denike.io/s/") {
-		re := regexp.MustCompile("(https://nextcloud.denike.io/s/[^ ]*)")
+		re := regexp.MustCompile("(https://nextcloud.denike.io/s/[A-Za-z0-9]{15})")
 		matches := re.FindStringSubmatch(m.Content)
 
 		if len(matches) > 0 {
 			resp, _ := http.Get(matches[0])
-			body, _ := io.ReadAll(resp.Body)
+			if resp.StatusCode < 400 {
+				body, _ := io.ReadAll(resp.Body)
 
-			doc, _ := goquery.NewDocumentFromReader(bytes.NewReader(body))
-			image, _ := doc.Find("a#downloadFile").Eq(0).Attr("href")
+				doc, _ := goquery.NewDocumentFromReader(bytes.NewReader(body))
+				image, _ := doc.Find("a#downloadFile").Eq(0).Attr("href")
 
-			s.ChannelMessageSend(m.ChannelID, image)
+				if image != "" {
+					s.ChannelMessageSend(m.ChannelID, image)
+				} else {
+					s.ChannelMessageSend(m.ChannelID, "NO!")
+				}
+			} else {
+				s.ChannelMessageSend(m.ChannelID, "NO!")
+			}
 		} else {
 			s.ChannelMessageSend(m.ChannelID, "NO!")
 		}
