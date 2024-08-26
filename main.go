@@ -67,6 +67,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		} else {
 			s.ChannelMessageSend(m.ChannelID, "NO!")
 		}
+	} else if strings.Contains(strings.ToLower(m.Content), "setup") {
+		msg := "Did somebody say setup?!?  https://denike.io/about/my-setup/desktop/"
+		s.ChannelMessageSend(m.ChannelID, msg)
 	}
 
 }
