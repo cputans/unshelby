@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"math/rand/v2"
 	"net/http"
 	"os"
 	"os/signal"
@@ -68,8 +69,12 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, "NO!")
 		}
 	} else if strings.Contains(strings.ToLower(m.Content), "setup") {
-		msg := "Did somebody say setup?!?  https://denike.io/about/my-setup/desktop/"
-		s.ChannelMessageSend(m.ChannelID, msg)
+		rand := rand.IntN(6+1-1) + 1
+
+		if rand == 3 {
+			msg := "Did somebody say setup?!?  https://denike.io/about/my-setup/desktop/"
+			s.ChannelMessageSend(m.ChannelID, msg)
+		}
 	}
 
 }
