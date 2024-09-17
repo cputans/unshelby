@@ -69,7 +69,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, "NO!")
 		}
 	} else if strings.Contains(strings.ToLower(m.Content), "setup") {
-		rand := rand.IntN(6+1-1) + 1
+		rand := rand.IntN(6) + 1
 
 		if rand == 3 {
 			msg := "Did somebody say setup?!?  https://denike.io/about/my-setup/desktop/"
